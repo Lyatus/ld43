@@ -1,6 +1,142 @@
 pico-8 cartridge // http://www.pico-8.com
 version 16
 __lua__
+-- general
+
+function _init()
+	crs_init()
+	cyc_init()
+	lth_init()
+	map_init()
+	act_reset()
+end
+function _update()
+	crs_update()
+	lth_draw()
+	cyc_update()
+end
+function _draw()
+	cls()
+	map_draw()
+	crs_draw()
+	lth_draw()
+	cyc_draw()
+end
+
+-->8
+-- map
+function map_init()
+
+end
+function map_draw()
+	map(0, 0, 0, 0, 16, 16)
+end
+
+-->8
+-- cursor
+function crs_init()
+	crs_x = 8
+	crs_y = 8
+end
+function crs_update()
+	if btnp(4) then -- action
+		local act = act_get(crs_x, crs_y)
+		if act then
+			act.f()
+		end
+	elseif btnp(0) then crs_x -= 1
+	elseif btnp(1) then crs_x += 1
+	elseif btnp(2) then crs_y -= 1
+	elseif btnp(3) then crs_y += 1
+	end
+	crs_x = mid(0, crs_x, 15)
+	crs_y = mid(0, crs_y, 15)
+end
+function crs_draw()
+	local act = act_get(crs_x, crs_y)
+	if act then
+		pal(7, 12)
+	end
+	spr(80, crs_x*8, crs_y*8)
+	pal()
+end
+
+-->8
+-- health
+
+function lth_init()
+	lth = 3
+	lth_max = 3
+end
+function lth_update()
+
+end
+function lth_draw()
+	for i=1,lth_max do
+		local sprite = i>lth and 64 or 65
+		spr(sprite, i*8-8, 0)
+	end
+end
+
+-->8
+-- actions
+function act_reset()
+	act_i = 1
+	acts = {}
+end
+function act_add(x, y, f)
+	local act = {
+		x=x,y=y,f=f,
+	}
+	acts[act_i] = act
+	act_i += 1
+	return act
+end
+function act_rem(act)
+	-- todo
+end
+function act_get(x, y)
+	-- todo: use map offset
+	for act in all(acts) do
+		if act.x==x and act.y==y then
+			return act
+		end
+	end
+end
+
+-->8
+-- cycle
+
+function cyc_init()
+	cyc_frame = 0
+end
+function cyc_update()
+	cyc_frame += 1
+end
+function cyc_draw()
+	local cyc_icon = cyc_is_day() and 66 or 67
+	spr(cyc_icon, 99, 0)
+
+	local time_str = leftpad(ceil(cyc_hour()%12),"0",2)
+	.. ":" .. leftpad(flr(cyc_minute()%60),"0",2)
+	print(time_str, 108, 1)
+end
+function cyc_minute() return cyc_frame / 30 end
+function cyc_hour() return cyc_minute() / 60 end
+function cyc_day() return cyc_hour() / 24 end
+function cyc_is_day() return abs(cyc_hour() % 24 - 12) < 8 end
+function cyc_is_night() return not cyc_is_day() end
+
+-->8
+-- util
+
+function leftpad(str, pad, n)
+	str = str .. ""
+	while #str < n do
+		str = pad .. str
+	end
+	return str;
+end
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
