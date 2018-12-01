@@ -44,11 +44,11 @@ function crs_update()
 		if act then
 			act.f()
 		end
-	elseif btnp(0) then crs_x -= 1
-	elseif btnp(1) then crs_x += 1
-	elseif btnp(2) then crs_y -= 1
-	elseif btnp(3) then crs_y += 1
 	end
+	if btnp(0) then crs_x -= 1 end
+	if btnp(1) then crs_x += 1 end
+	if btnp(2) then crs_y -= 1 end
+	if btnp(3) then crs_y += 1 end
 	crs_x = mid(0, crs_x, 15)
 	crs_y = mid(0, crs_y, 15)
 end
