@@ -47,9 +47,10 @@ function tma_update()
 		local tma_new_x = mid(tma_x+1, tma_x-1, tma_dst_x)
 		local tma_new_y = mid(tma_y+1, tma_y-1, tma_dst_y)
 		if tma_new_x != tma_x or tma_new_y != tma_y then
-			-- todo handle collision
-			tma_x = tma_new_x
-			tma_y = tma_new_y
+			local map_spr_x = mget(tma_new_x/8,tma_y/8)
+			local map_spr_y = mget(tma_x/8,tma_new_y/8)
+			tma_x = fget(map_spr_x,0) and tma_x or tma_new_x
+			tma_y = fget(map_spr_y,0) and tma_y or tma_new_y
 		else
 			tma_dst = false
 		end
