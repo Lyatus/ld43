@@ -27,7 +27,6 @@ function _draw()
 	cyc_draw()
 end
 
--->8
 -- tama
 
 tma_stages = {
@@ -72,7 +71,6 @@ function tma_goto(x, y)
 	tma_dst_y = y
 end
 
--->8o
 -- map
 
 function map_init()
@@ -97,7 +95,6 @@ function map_move(x, y)
 	return old_map_x != map_x or old_map_x != map_y
 end
 
--->8
 -- cursor
 function crs_init()
 	crs_x = 8
@@ -140,7 +137,6 @@ function crs_draw()
 	pal()
 end
 
--->8
 -- health
 
 function lth_init()
@@ -157,7 +153,6 @@ function lth_draw()
 	end
 end
 
--->8
 -- actions
 function act_reset()
 	act_i = 1
@@ -183,7 +178,6 @@ function act_get(x, y)
 	end
 end
 
--->8
 -- cycle
 
 function cyc_init()
