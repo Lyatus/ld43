@@ -219,6 +219,7 @@ houses = {
 		spr=138,
 	},
 }
+houses = {} -- for now
 
 function hou_draw()
 	for h in all(houses) do
