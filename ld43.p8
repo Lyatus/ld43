@@ -13,6 +13,7 @@ function _init()
 end
 function _update()
 	crs_update()
+	map_update()
 	lth_draw()
 	cyc_update()
 	tma_update()
@@ -77,6 +78,12 @@ end
 function map_init()
 	map_x = 0
 	map_y = 0
+end
+function map_update()
+	if map_x+10 < tma_x/8 then map_move(1,0) end
+	if map_x+6 > tma_x/8 then map_move(-1,0) end
+	if map_y+10 < tma_y/8 then map_move(0,1) end
+	if map_y+6 > tma_y/8 then map_move(0,-1) end
 end
 function map_draw()
 	map(map_x, map_y, 0, 0, 16, 16)
