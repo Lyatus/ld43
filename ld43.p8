@@ -22,9 +22,9 @@ function _draw()
 	cls()
 	map_draw()
 	lth_draw()
-	cyc_draw()
 	tma_draw()
 	crs_draw()
+	cyc_draw()
 end
 
 -->8
@@ -188,6 +188,10 @@ function cyc_draw()
 	local time_str = leftpad(ceil(cyc_hour()%12),"0",2)
 	.. ":" .. leftpad(flr(cyc_minute()%60),"0",2)
 	print(time_str, 108, 1, 7)
+
+	if cyc_is_night() then
+		pal(5,1,1)
+	end
 end
 function cyc_minute() return cyc_frame / 30 end
 function cyc_hour() return cyc_minute() / 60 end
