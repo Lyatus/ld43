@@ -143,9 +143,13 @@ end
 function lth_init()
 	lth = 5
 	lth_max = 5
+	lth_frame = 0
 end
 function lth_update()
-
+	lth_frame += 1
+	if lth_frame%240==0 then
+		lth -= 1
+	end
 end
 function lth_draw()
 	for i=1,lth_max do
