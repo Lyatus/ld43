@@ -115,7 +115,7 @@ function crs_update()
 end
 function crs_draw()
 	local act = act_get(crs_x, crs_y)
-	local sprite = btnp(4) and 81 or 80
+	local sprite = btn(4) and 81 or 80
 	if act then
 		pal(7, 12)
 	end
