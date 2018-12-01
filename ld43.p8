@@ -101,8 +101,7 @@ function crs_update()
 		if act then
 			act.f()
 		else -- tama destination
-			-- todo handle map offset
-			tma_goto(crs_x*8+4, crs_y*8+4)
+			tma_goto(crs_x*8+map_x*8+4, crs_y*8+map_y*8+4)
 		end
 	end
 	if btnp(0) then crs_x -= 1 end
