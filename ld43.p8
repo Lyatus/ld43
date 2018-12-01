@@ -59,7 +59,7 @@ end
 function tma_draw()
 	-- handle map offset
 	local off_x = -8
-	local off_y = -8
+	local off_y = -14
 	if tma_dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
