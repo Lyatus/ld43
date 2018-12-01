@@ -126,8 +126,8 @@ end
 -- health
 
 function lth_init()
-	lth = 3
-	lth_max = 3
+	lth = 5
+	lth_max = 5
 end
 function lth_update()
 
