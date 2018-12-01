@@ -102,7 +102,7 @@ function crs_init()
 	crs_y = 8
 	crs_last_m_x = -1
 	crs_last_m_y = -1
-	poke(0x5F2D, 1)
+	poke(0x5f2d, 1)
 end
 function crs_update()
 	if btnp(4) or stat(34)!=0 then -- action
