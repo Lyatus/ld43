@@ -119,7 +119,7 @@ function cyc_draw()
 
 	local time_str = leftpad(ceil(cyc_hour()%12),"0",2)
 	.. ":" .. leftpad(flr(cyc_minute()%60),"0",2)
-	print(time_str, 108, 1)
+	print(time_str, 108, 1, 7)
 end
 function cyc_minute() return cyc_frame / 30 end
 function cyc_hour() return cyc_minute() / 60 end
