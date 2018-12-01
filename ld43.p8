@@ -25,11 +25,21 @@ end
 
 -->8
 -- map
-function map_init()
 
+function map_init()
+	map_x = 0
+	map_y = 0
 end
 function map_draw()
-	map(0, 0, 0, 0, 16, 16)
+	map(map_x, map_y, 0, 0, 16, 16)
+end
+function map_move(x, y)
+	-- return true if actually moved
+	local old_map_x = map_x
+	local old_map_y = map_y
+	map_x = mid(0, map_x+x, 16)
+	map_y = mid(0, map_y+y, 16)
+	return old_map_x != map_x or old_map_x != map_y
 end
 
 -->8
