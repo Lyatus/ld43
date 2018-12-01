@@ -21,6 +21,7 @@ end
 function _draw()
 	cls()
 	map_draw()
+	hou_draw()
 	lth_draw()
 	tma_draw()
 	crs_draw()
@@ -204,7 +205,30 @@ function cyc_day() return cyc_hour() / 24 end
 function cyc_is_day() return abs(cyc_hour() % 24 - 12) < 8 end
 function cyc_is_night() return not cyc_is_day() end
 
--->8
+-- houses
+
+houses = {
+	{
+		x=13,y=4,
+		sw=5,sh=4,
+		spr=133,
+	},
+	{
+		x=20,y=4,
+		sw=5,sh=4,
+		spr=138,
+	},
+}
+
+function hou_draw()
+	for h in all(houses) do
+		if mid(tma_x,h.x*8,(h.x+h.sw)*8) != tma_x
+		or mid(tma_y,h.y*8,(h.y+h.sh)*8) != tma_y then
+			spr(h.spr,h.x*8-map_x,h.y*8-map_y,h.sw,h.sh)
+		end
+	end
+end
+
 -- util
 
 function leftpad(str, pad, n)
