@@ -64,7 +64,7 @@ function tma_draw()
 	if tma_dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
-	spr(1,tma_x-map_x*8+off_x,tma_y-map_y*8+off_y,2,2)
+	spr(1,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
 end
 function tma_goto(x, y)
 	tma_dst = true
@@ -80,20 +80,20 @@ function map_init()
 	map_y = 0
 end
 function map_update()
-	if map_x+10 < tma_x/8 then map_move(1,0) end
-	if map_x+6 > tma_x/8 then map_move(-1,0) end
-	if map_y+10 < tma_y/8 then map_move(0,1) end
-	if map_y+6 > tma_y/8 then map_move(0,-1) end
+	if map_x+32 < tma_x then map_move(1,0) end
+	if map_x+96 > tma_x then map_move(-1,0) end
+	if map_y+32 < tma_y then map_move(0,1) end
+	if map_y+96 > tma_y then map_move(0,-1) end
 end
 function map_draw()
-	map(map_x, map_y, 0, 0, 16, 16)
+	map(map_x/8, map_y/8, -(map_x%8), -(map_y%8), 17, 17)
 end
 function map_move(x, y)
 	-- return true if actually moved
 	local old_map_x = map_x
 	local old_map_y = map_y
-	map_x = mid(0, map_x+x, 16)
-	map_y = mid(0, map_y+y, 16)
+	map_x = mid(0, map_x+x, 128)
+	map_y = mid(0, map_y+y, 128)
 	return old_map_x != map_x or old_map_x != map_y
 end
 
@@ -109,7 +109,7 @@ function crs_update()
 		if act then
 			act.f()
 		else -- tama destination
-			tma_goto(crs_x*8+map_x*8+4, crs_y*8+map_y*8+4)
+			tma_goto(crs_x*8+map_x+4, crs_y*8+map_y+4)
 		end
 	end
 	if btnp(0) then crs_x -= 1 end
