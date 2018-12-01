@@ -57,13 +57,12 @@ function tma_update()
 	tma_frame += 1
 end
 function tma_draw()
-	-- handle map offset
 	local off_x = -8
 	local off_y = -14
 	if tma_dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
-	spr(1, tma_x+off_x, tma_y+off_y, 2, 2)
+	spr(1,tma_x-map_x*8+off_x,tma_y-map_y*8+off_y,2,2)
 end
 function tma_goto(x, y)
 	tma_dst = true
