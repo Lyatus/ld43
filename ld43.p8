@@ -14,7 +14,7 @@ end
 function _update()
 	crs_update()
 	map_update()
-	lth_draw()
+	lth_update()
 	cyc_update()
 	tma_update()
 end
