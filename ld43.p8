@@ -193,7 +193,7 @@ function cyc_draw()
 		pal(5,1,1)
 	end
 end
-function cyc_minute() return cyc_frame / 30 end
+function cyc_minute() return cyc_frame end
 function cyc_hour() return cyc_minute() / 60 end
 function cyc_day() return cyc_hour() / 24 end
 function cyc_is_day() return abs(cyc_hour() % 24 - 12) < 8 end
