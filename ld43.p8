@@ -98,35 +98,35 @@ end
 
 -- cursor
 function crs_init()
-	crs_x = 8
-	crs_y = 8
+	crs_x = 64
+	crs_y = 64
 	crs_last_m_x = -1
 	crs_last_m_y = -1
 	poke(0x5f2d, 1)
 end
 function crs_update()
 	if btnp(4) or stat(34)!=0 then -- action
-		local act = act_get(crs_x, crs_y)
+		local act = act_get(flr(crs_x/8),flr(crs_y/8))
 		if act then
 			act.f()
 		else -- tama destination
-			tma_goto(crs_x*8+map_x+4, crs_y*8+map_y+4)
+			tma_goto(crs_x+map_x, crs_y+map_y)
 		end
 	end
-	if btnp(0) then crs_x -= 1 end
-	if btnp(1) then crs_x += 1 end
-	if btnp(2) then crs_y -= 1 end
-	if btnp(3) then crs_y += 1 end
+	if btn(0) then crs_x -= 2 end
+	if btn(1) then crs_x += 2 end
+	if btn(2) then crs_y -= 2 end
+	if btn(3) then crs_y += 2 end
 	if stat(32) != crs_last_m_x then
-		crs_x = flr(stat(32)/8)
+		crs_x = stat(32)
 		crs_last_m_x = stat(32)
 	end
 	if stat(33) != crs_last_m_y then
-		crs_y = flr(stat(33)/8)
+		crs_y = stat(33)
 		crs_last_m_y = stat(33)
 	end
-	crs_x = mid(0, crs_x, 15)
-	crs_y = mid(0, crs_y, 15)
+	crs_x = mid(0, crs_x, 128)
+	crs_y = mid(0, crs_y, 128)
 end
 function crs_draw()
 	local act = act_get(crs_x, crs_y)
@@ -134,7 +134,7 @@ function crs_draw()
 	if act then
 		pal(7, 12)
 	end
-	spr(sprite, crs_x*8, crs_y*8)
+	spr(sprite, crs_x-4, crs_y-4)
 	pal()
 end
 
