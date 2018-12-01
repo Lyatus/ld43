@@ -9,21 +9,69 @@ function _init()
 	lth_init()
 	map_init()
 	act_reset()
+	tma_init()
 end
 function _update()
 	crs_update()
 	lth_draw()
 	cyc_update()
+	tma_update()
 end
 function _draw()
 	cls()
 	map_draw()
 	lth_draw()
 	cyc_draw()
+	tma_draw()
 	crs_draw()
 end
 
 -->8
+-- tama
+
+tma_stages = {
+	{
+		idl_spr = 1,
+		eat_spr = 3,
+	},
+}
+
+function tma_init()
+	tma_stage = 1
+	tma_x = 64
+	tma_y = 64
+	tma_frame = 0
+end
+function tma_update()
+	if tma_dst then
+		local tma_new_x = mid(tma_x+1, tma_x-1, tma_dst_x)
+		local tma_new_y = mid(tma_y+1, tma_y-1, tma_dst_y)
+		if tma_new_x != tma_x or tma_new_y != tma_y then
+			-- todo handle collision
+			tma_x = tma_new_x
+			tma_y = tma_new_y
+		else
+			tma_dst = false
+		end
+	end
+	tma_frame += 1
+end
+function tma_draw()
+	-- handle map offset
+	local off_x = -8
+	local off_y = -8
+	if tma_dst and tma_frame % 6 < 2 then
+		off_y -= 1
+	end
+	spr(1, tma_x+off_x, tma_y+off_y, 2, 2)
+end
+function tma_goto(x, y)
+	tma_dst = true
+	tma_dst_x = x
+	tma_dst_y = y
+end
+
+-->8o
 -- map
 
 function map_init()
@@ -53,6 +101,9 @@ function crs_update()
 		local act = act_get(crs_x, crs_y)
 		if act then
 			act.f()
+		else -- tama destination
+			-- todo handle map offset
+			tma_goto(crs_x*8+4, crs_y*8+4)
 		end
 	end
 	if btnp(0) then crs_x -= 1 end
