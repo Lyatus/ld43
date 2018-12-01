@@ -48,10 +48,10 @@ function tma_update()
 		local tma_new_x = mid(tma_x+1, tma_x-1, tma_dst_x)
 		local tma_new_y = mid(tma_y+1, tma_y-1, tma_dst_y)
 		if tma_new_x != tma_x or tma_new_y != tma_y then
-			local map_spr_x = mget(tma_new_x/8,tma_y/8)
-			local map_spr_y = mget(tma_x/8,tma_new_y/8)
-			tma_x = fget(map_spr_x,0) and tma_x or tma_new_x
-			tma_y = fget(map_spr_y,0) and tma_y or tma_new_y
+			local col_x = fget(mget((tma_new_x-4)/8,tma_y/8),0) or fget(mget((tma_new_x+4)/8,tma_y/8),0)
+			local col_y = fget(mget(tma_x/8,tma_new_y/8),0)
+			tma_x = col_x and tma_x or tma_new_x
+			tma_y = col_y and tma_y or tma_new_y
 		else
 			tma_dst = false
 		end
@@ -102,9 +102,12 @@ end
 function crs_init()
 	crs_x = 8
 	crs_y = 8
+	crs_last_m_x = -1
+	crs_last_m_y = -1
+	poke(0x5F2D, 1)
 end
 function crs_update()
-	if btnp(4) then -- action
+	if btnp(4) or stat(34)!=0 then -- action
 		local act = act_get(crs_x, crs_y)
 		if act then
 			act.f()
@@ -116,12 +119,20 @@ function crs_update()
 	if btnp(1) then crs_x += 1 end
 	if btnp(2) then crs_y -= 1 end
 	if btnp(3) then crs_y += 1 end
+	if stat(32) != crs_last_m_x then
+		crs_x = flr(stat(32)/8)
+		crs_last_m_x = stat(32)
+	end
+	if stat(33) != crs_last_m_y then
+		crs_y = flr(stat(33)/8)
+		crs_last_m_y = stat(33)
+	end
 	crs_x = mid(0, crs_x, 15)
 	crs_y = mid(0, crs_y, 15)
 end
 function crs_draw()
 	local act = act_get(crs_x, crs_y)
-	local sprite = btn(4) and 81 or 80
+	local sprite = (btn(4) or stat(34)!=0) and 81 or 80
 	if act then
 		pal(7, 12)
 	end
