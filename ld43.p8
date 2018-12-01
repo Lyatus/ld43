@@ -18,9 +18,9 @@ end
 function _draw()
 	cls()
 	map_draw()
-	crs_draw()
 	lth_draw()
 	cyc_draw()
+	crs_draw()
 end
 
 -->8
