@@ -229,7 +229,7 @@ spa_candy = {
 function spa_init()
 	spas = {}
 	add(spas,{
-		x=55,y=70,ent=spa_candy,
+		x=85,y=130,ent=spa_candy,
 	})
 end
 function spa_update()
