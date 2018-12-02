@@ -157,6 +157,10 @@ function lth_draw()
 		spr(sprite, i*8-7, 0)
 	end
 end
+function lth_add(v)
+	lth = max(v,lth+v)
+	lth_frame = 0
+end
 
 -- actions
 function act_reset()
