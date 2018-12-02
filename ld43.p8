@@ -7,8 +7,8 @@ function _init()
 	crs_init()
 	cyc_init()
 	lth_init()
+	ent_init()
 	map_init()
-	act_reset()
 	tma_init()
 end
 function _update()
@@ -23,6 +23,7 @@ function _draw()
 	map_draw()
 	hou_draw()
 	lth_draw()
+	ent_draw()
 	tma_draw()
 	crs_draw()
 	cyc_draw()
@@ -106,9 +107,9 @@ function crs_init()
 end
 function crs_update()
 	if btnp(4) or stat(34)!=0 then -- action
-		local act = act_get(flr(crs_x/8),flr(crs_y/8))
-		if act then
-			act.f()
+		local ent = ent_at(crs_x+map_x,crs_y+map_y)
+		if ent and ent.act then
+			ent:act()
 		else -- tama destination
 			tma_goto(crs_x+map_x, crs_y+map_y)
 		end
@@ -129,12 +130,16 @@ function crs_update()
 	crs_y = mid(0, crs_y, 128)
 end
 function crs_draw()
-	local act = act_get(crs_x, crs_y)
 	local sprite = (btn(4) or stat(34)!=0) and 81 or 80
-	if act then
+	local crs_draw_x = crs_x
+	local crs_draw_y = crs_y
+	local ent = ent_at(crs_x+map_x, crs_y+map_y)
+	if ent and ent.act then
 		pal(7, 12)
+		crs_draw_x = ent.x-map_x
+		crs_draw_y = ent.y-map_y
 	end
-	spr(sprite, crs_x-4, crs_y-4)
+	spr(sprite, crs_draw_x-4, crs_draw_y-4)
 	pal()
 end
 
@@ -162,29 +167,33 @@ function lth_add(v)
 	lth_frame = 0
 end
 
--- actions
-function act_reset()
-	act_i = 1
-	acts = {}
+-- entities
+-- entities have draws and actions associated to them
+-- actions get called when tama is near enough
+
+function ent_init()
+	ents = {}
 end
-function act_add(x, y, f)
-	local act = {
-		x=x,y=y,f=f,
-	}
-	acts[act_i] = act
-	act_i += 1
-	return act
+function ent_draw()
+	for ent in all(ents) do
+		ent:draw()
+	end
 end
-function act_rem(act)
-	-- todo
+function ent_add(e)
+	add(ents,e)
 end
-function act_get(x, y)
-	-- todo: use map offset
-	for act in all(acts) do
-		if act.x==x and act.y==y then
-			return act
+function ent_rem(e)
+	del(ents,e)
+end
+function ent_at(x,y)
+	-- todo handle entity size?
+	for ent in all(ents) do
+		if mid(ent.x,x-4,x+4) == ent.x
+		and mid(ent.y,y-4,y+4) == ent.y then
+			return ent
 		end
 	end
+	return nil
 end
 
 -- cycle
