@@ -287,7 +287,10 @@ function cyc_draw()
 
 	local time_str = leftpad(ceil(cyc_hour()%12),"0",2)
 	.. ":" .. leftpad(flr(cyc_minute()%60),"0",2)
-	print(time_str, 108, 1, 7)
+
+	outline(7,0,108,1,function(x,y)
+		print(time_str, x, y, 7)
+	end)
 
 	if cyc_is_night() then
 		pal(5,1,1)
@@ -347,6 +350,16 @@ function copy(t)
 		c[k] = v
 	end
 	return c
+end
+function outline(old_c,new_c,x,y,f)
+	pal(old_c,new_c)
+	for i=-1,1 do
+		for j=-1,1 do
+			f(x+i,y+j)
+		end
+	end
+	pal(old_c,old_c)
+	f(x,y)
 end
 
 __gfx__
