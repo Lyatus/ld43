@@ -297,6 +297,11 @@ houses = {
 		mx=35,my=3,
 		w=8,h=6,
 	},
+	{
+		x=5,y=19,
+		mx=45,my=3,
+		w=9,h=6,
+	},
 }
 
 function hou_draw()
