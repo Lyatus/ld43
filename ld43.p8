@@ -248,7 +248,7 @@ spa_candy = {
 }
 spa_villager = {
 	draw = function(o)
-		spr(5,o.x-map_x-8,o.y-map_y-14,2,2)
+		spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
 	end,
 }
 function spa_init()
