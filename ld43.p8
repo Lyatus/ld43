@@ -39,10 +39,18 @@ tma_stages = {
 		idl_spr = 1,
 		eat_spr = 3,
 	},
+	{
+		idl_spr = 32,
+		eat_spr = 34,
+	},
+	{
+		idl_spr = 8,
+		eat_spr = 10,
+	},
 }
 
 function tma_init()
-	tma_stage = 1
+	tma_stage = tma_stages[1]
 	tma_x = 96
 	tma_y = 96
 	tma_frame = 0
@@ -63,17 +71,18 @@ function tma_update()
 			tma_dst = false
 		end
 	end
+	tma_stage = tma_stages[min(3,ceil(cyc_day()))]
 	tma_frame += 1
 end
 function tma_draw()
-	local sprite = 1
+	local sprite = tma_stage.idl_spr
 	local off_x = -8
 	local off_y = -14
 	if tma_dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
 	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
-		sprite = 3
+		sprite = tma_stage.eat_spr
 	end
 	spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
 end
