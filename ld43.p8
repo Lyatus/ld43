@@ -49,11 +49,13 @@ function tma_update()
 	if tma_dst then
 		local tma_new_x = mid(tma_x+1, tma_x-1, tma_dst_x)
 		local tma_new_y = mid(tma_y+1, tma_y-1, tma_dst_y)
+		local col_x = fget(mget((tma_new_x-4)/8,tma_y/8),0) or fget(mget((tma_new_x+4)/8,tma_y/8),0)
+		local col_y = fget(mget((tma_x-3)/8,tma_new_y/8),0) or fget(mget((tma_x+3)/8,tma_new_y/8),0)
+		tma_new_x = col_x and tma_x or tma_new_x
+		tma_new_y = col_y and tma_y or tma_new_y
 		if tma_new_x != tma_x or tma_new_y != tma_y then
-			local col_x = fget(mget((tma_new_x-4)/8,tma_y/8),0) or fget(mget((tma_new_x+4)/8,tma_y/8),0)
-			local col_y = fget(mget(tma_x/8,tma_new_y/8),0)
-			tma_x = col_x and tma_x or tma_new_x
-			tma_y = col_y and tma_y or tma_new_y
+			tma_x = tma_new_x
+			tma_y = tma_new_y
 		else
 			tma_dst = false
 		end
