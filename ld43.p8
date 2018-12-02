@@ -283,7 +283,10 @@ function cyc_update()
 end
 function cyc_draw()
 	local cyc_icon = cyc_is_day() and 66 or 67
-	spr(cyc_icon, 99, 0)
+	
+	outline(7,0,98,0,function(x,y)
+		spr(cyc_icon, x, y)
+	end)
 
 	local time_str = leftpad(ceil(cyc_hour()%12),"0",2)
 	.. ":" .. leftpad(flr(cyc_minute()%60),"0",2)
