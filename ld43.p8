@@ -43,8 +43,8 @@ tma_stages = {
 
 function tma_init()
 	tma_stage = 1
-	tma_x = 64
-	tma_y = 64
+	tma_x = 96
+	tma_y = 96
 	tma_frame = 0
 end
 function tma_update()
