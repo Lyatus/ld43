@@ -293,6 +293,8 @@ function cyc_draw()
 		pal(5,1,1)
 	--	pal(0,6,1)
 	--	pal(6,0,1)			
+	else
+		pal(5,5,1)
 	end
 end
 function cyc_minute() return cyc_frame end
