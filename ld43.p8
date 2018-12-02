@@ -46,6 +46,7 @@ function tma_init()
 	tma_x = 96
 	tma_y = 96
 	tma_frame = 0
+	tma_eat_frame = -99
 end
 function tma_update()
 	if tma_dst then
@@ -65,18 +66,25 @@ function tma_update()
 	tma_frame += 1
 end
 function tma_draw()
+	local sprite = 1
 	local off_x = -8
 	local off_y = -14
 	if tma_dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
-	spr(1,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
+	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
+		sprite = 3
+	end
+	spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
 end
 function tma_goto(x, y)
 	tma_dst = true
 	tma_dst_x = x
 	tma_dst_y = y
 	ent_cur_act = nil -- ugh
+end
+function tma_ate()
+	tma_eat_frame = tma_frame
 end
 
 -- map
@@ -223,6 +231,7 @@ spa_candy = {
 	end,
 	act = function(o)
 		lth_add(2)
+		tma_ate()
 		ent_rem(o)
 	end,
 }
