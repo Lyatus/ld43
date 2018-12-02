@@ -322,14 +322,12 @@ houses = {
 }
 
 function hou_draw()
-	palt(0,false)
 	for h in all(houses) do
 		if mid(tma_x,h.x*8,(h.x+h.w)*8) != tma_x
 		or mid(tma_y,h.y*8,(h.y+h.h)*8) != tma_y then
 			map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
 		end
 	end
-	palt(0,true)
 end
 
 -- util
