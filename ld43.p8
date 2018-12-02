@@ -273,6 +273,13 @@ function leftpad(str, pad, n)
 	end
 	return str;
 end
+function copy(t)
+	local c = {}
+	for k, v in pairs(t) do
+		c[k] = v
+	end
+	return c
+end
 
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
