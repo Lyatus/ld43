@@ -25,8 +25,8 @@ function _draw()
 	cls()
 	map_draw()
 	hou_draw()
-	lth_draw()
 	ent_draw()
+	lth_draw()
 	tma_draw()
 	crs_draw()
 	cyc_draw()
@@ -244,10 +244,18 @@ spa_candy = {
 		ent_rem(o)
 	end,
 }
+spa_villager = {
+	draw = function(o)
+		spr(5,o.x-map_x-8,o.y-map_y-14,2,2)
+	end,
+}
 function spa_init()
 	spas = {}
 	add(spas,{
 		x=85,y=130,ent=spa_candy,
+	})
+	add(spas,{
+		x=48,y=48,ent=spa_villager,
 	})
 end
 function spa_update()
