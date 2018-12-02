@@ -86,10 +86,7 @@ function tma_draw()
 	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
 		sprite = tma_stage.eat_spr
 	end
-	palt(0,false)
-	palt(10,true)
 	spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
-	palt()
 end
 function tma_goto(x, y)
 	tma_dst = true
