@@ -293,6 +293,11 @@ function cyc_is_night() return not cyc_is_day() end
 
 houses = {
 	{
+		x=4,y=2,
+		mx=35,my=11,
+		w=5,h=6,
+	},
+	{
 		x=20,y=3,
 		mx=35,my=3,
 		w=8,h=6,
