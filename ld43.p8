@@ -15,6 +15,7 @@ function _update()
 	crs_update()
 	map_update()
 	lth_update()
+	ent_update()
 	cyc_update()
 	tma_update()
 end
@@ -71,6 +72,7 @@ function tma_goto(x, y)
 	tma_dst = true
 	tma_dst_x = x
 	tma_dst_y = y
+	ent_cur_act = nil -- ugh
 end
 
 -- map
@@ -109,7 +111,7 @@ function crs_update()
 	if btnp(4) or stat(34)!=0 then -- action
 		local ent = ent_at(crs_x+map_x,crs_y+map_y)
 		if ent and ent.act then
-			ent:act()
+			ent_act(ent)
 		else -- tama destination
 			tma_goto(crs_x+map_x, crs_y+map_y)
 		end
@@ -173,6 +175,15 @@ end
 
 function ent_init()
 	ents = {}
+	ent_cur_act = nil
+end
+function ent_update()
+	if ent_cur_act and ent_cur_act.act
+	and mid(tma_x,ent_cur_act.x-4,ent_cur_act.x+4) == tma_x
+	and mid(tma_y,ent_cur_act.y-4,ent_cur_act.y+4) == tma_y then
+		ent_cur_act:act()
+		ent_cur_act = nil
+	end
 end
 function ent_draw()
 	for ent in all(ents) do
@@ -194,6 +205,10 @@ function ent_at(x,y)
 		end
 	end
 	return nil
+end
+function ent_act(e)
+	tma_goto(e.x,e.y)
+	ent_cur_act = e
 end
 
 -- cycle
