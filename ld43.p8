@@ -154,7 +154,7 @@ end
 function lth_draw()
 	for i=1,lth_max do
 		local sprite = i>lth and 64 or 65
-		spr(sprite, i*8-8, 0)
+		spr(sprite, i*8-7, 0)
 	end
 end
 
