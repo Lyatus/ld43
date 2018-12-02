@@ -275,25 +275,21 @@ function cyc_is_night() return not cyc_is_day() end
 
 houses = {
 	{
-		x=13,y=4,
-		sw=5,sh=4,
-		spr=133,
-	},
-	{
-		x=20,y=4,
-		sw=5,sh=4,
-		spr=138,
+		x=20,y=3,
+		mx=35,my=3,
+		w=8,h=6,
 	},
 }
-houses = {} -- for now
 
 function hou_draw()
+	palt(0,false)
 	for h in all(houses) do
-		if mid(tma_x,h.x*8,(h.x+h.sw)*8) != tma_x
-		or mid(tma_y,h.y*8,(h.y+h.sh)*8) != tma_y then
-			spr(h.spr,h.x*8-map_x,h.y*8-map_y,h.sw,h.sh)
+		if mid(tma_x,h.x*8,(h.x+h.w)*8) != tma_x
+		or mid(tma_y,h.y*8,(h.y+h.h)*8) != tma_y then
+			map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
 		end
 	end
+	palt()
 end
 
 -- util
