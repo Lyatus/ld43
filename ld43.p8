@@ -9,6 +9,7 @@ function _init()
 	lth_init()
 	ent_init()
 	map_init()
+	spa_init()
 	tma_init()
 end
 function _update()
@@ -16,6 +17,7 @@ function _update()
 	map_update()
 	lth_update()
 	ent_update()
+	spa_update()
 	cyc_update()
 	tma_update()
 end
@@ -211,6 +213,36 @@ end
 function ent_act(e)
 	tma_goto(e.x,e.y)
 	ent_cur_act = e
+end
+
+-- spawn
+
+spa_candy = {
+	draw = function(o)
+		spr(96,o.x-map_x-4,o.y-map_y-4)
+	end,
+	act = function(o)
+		lth_add(2)
+		ent_rem(o)
+	end,
+}
+function spa_init()
+	spas = {}
+	add(spas,{
+		x=55,y=70,ent=spa_candy,
+	})
+end
+function spa_update()
+	local today = flr(cyc_day())
+	for spa in all(spas) do
+		if not spa.last or spa.last != today then
+			local new_ent = copy(spa.ent)
+			new_ent.x = spa.x
+			new_ent.y = spa.y
+			ent_add(new_ent)
+			spa.last = today
+		end
+	end
 end
 
 -- cycle
