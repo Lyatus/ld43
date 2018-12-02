@@ -23,6 +23,8 @@ function _update()
 end
 function _draw()
 	cls()
+	palt(0,false)
+	palt(11,true)
 	map_draw()
 	hou_draw()
 	ent_draw()
