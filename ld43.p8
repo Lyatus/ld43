@@ -163,7 +163,7 @@ function crs_draw()
 		crs_draw_y = ent.y-map_y
 	end
 	spr(sprite, crs_draw_x-4, crs_draw_y-4)
-	pal()
+	pal(7,7)
 end
 
 -- health
@@ -327,7 +327,7 @@ function hou_draw()
 			map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
 		end
 	end
-	palt()
+	palt(0,true)
 end
 
 -- util
