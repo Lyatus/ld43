@@ -19,6 +19,7 @@ function game_init()
 	villager_count = 0
 end
 function game_update()
+	mus_update()
 	crs_update()
 	map_update()
 	lth_update()
@@ -82,9 +83,10 @@ end
 function startmenu_init()
 	_update = startmenu_update
 	_draw = startmenu_draw
-	music(0)
+	mus_play(0,34)
 end
 function startmenu_update()
+	mus_update()
 	if btnp(4) or btnp(5) then
 		game_init()
 	end
@@ -141,14 +143,20 @@ tma_stages = {
 	{
 		idl_spr = 1,
 		eat_spr = 3,
+		music_pattern = 0,
+		music_speed = 34,
 	},
 	{
 		idl_spr = 32,
 		eat_spr = 34,
+		music_pattern = 1,
+		music_speed = 43,
 	},
 	{
 		idl_spr = 8,
 		eat_spr = 10,
+		music_pattern = 2,
+		music_speed = 46,
 	},
 }
 
@@ -161,7 +169,11 @@ function tma_init()
 end
 function tma_update()
 	tma_m:update()
+	local old_stage = tma_stage
 	tma_stage = tma_stages[mid(1,3,ceil(cyc_day()))]
+	if old_stage != tma_stage then
+		mus_play_trans(tma_stage.music_pattern,tma_stage.music_speed)
+	end
 	tma_frame += 1
 end
 function tma_draw()
@@ -684,6 +696,25 @@ function sfx_refuse()
 end
 function sfx_eat()
 	sfx(9)
+end
+
+-- mus
+
+function mus_update()
+	if mus_next_pattern and mus_frame%(mus_speed*8)==0 then
+		mus_play(mus_next_pattern,mus_next_speed)
+	end
+	mus_frame += 1
+end
+function mus_play_trans(pattern,speed)
+	mus_next_pattern = pattern
+	mus_next_speed = speed
+end
+function mus_play(pattern,speed)
+	music(pattern)
+	mus_next_pattern = nil
+	mus_speed = speed
+	mus_frame = 0
 end
 
 -- util
