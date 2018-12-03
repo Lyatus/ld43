@@ -4,6 +4,9 @@ __lua__
 -- general
 
 function _init()
+	startmenu_init()
+end
+function game_init()
 	crs_init()
 	cyc_init()
 	lth_init()
@@ -12,8 +15,10 @@ function _init()
 	spa_init()
 	tma_init()
 	music(0)
+	_update = game_update
+	_draw = game_draw
 end
-function _update()
+function game_update()
 	crs_update()
 	map_update()
 	lth_update()
@@ -22,7 +27,7 @@ function _update()
 	cyc_update()
 	tma_update()
 end
-function _draw()
+function game_draw()
 	cls()
 	palt(0,false)
 	palt(11,true)
@@ -44,26 +49,25 @@ end
 -- start menu
 
 -- samclaire- cool print (outlined, scaled)
-
 function osprint(text, x, y, height, color)
- -- save first line of image
- local save={}
- for i=1,96 do save[i]=peek4(0x6000+(i-1)*4) end
- memset(0x6000,0,384)
- print(text, 0, 0, 7)
- -- restore image and save first line of sprites
- for i=1,96 do local p=save[i] save[i]=peek4((i-1)*4) poke4((i-1)*4,peek4(0x6000+(i-1)*4)) poke4(0x6000+(i-1)*4, p) end
- -- cool blit
---	pal() pal(7,6)
---	for i=-1,1 do for j=-1,1 do sspr(0, 0, 128, 6, x+i, y+j, 128 * height / 6, height) end end
+	-- save first line of image
+	local save={}
+	for i=1,96 do save[i]=peek4(0x6000+(i-1)*4) end
+	memset(0x6000,0,384)
+	print(text, 0, 0, 7)
+	-- restore image and save first line of sprites
+	for i=1,96 do local p=save[i] save[i]=peek4((i-1)*4) poke4((i-1)*4,peek4(0x6000+(i-1)*4)) poke4(0x6000+(i-1)*4, p) end
+	-- cool blit
+	-- pal() pal(7,6)
+	-- for i=-1,1 do for j=-1,1 do sspr(0, 0, 128, 6, x+i, y+j, 128 * height / 6, height) end end
 	pal(7,color)
 	sspr(0, 0, 128, 6, x, y, 128 * height / 6, height)
- -- restore first line of sprites
- for i=1,96 do poke4(0x0000+(i-1)*4, save[i]) end
- pal()
+	-- restore first line of sprites
+	for i=1,96 do poke4(0x0000+(i-1)*4, save[i]) end
+	pal()
 end
 
-	-- centered text
+-- centered text
 title="▤tama▤"
 title2="gone wrong"
 textlabel="press z/x/c to start"
@@ -74,47 +78,62 @@ function hcenter(s)
 	return 64-#s*2
 end
 
-function vcenter(s) --tip
-	return 78
+-- startmenu
+function startmenu_init()
+	_update = startmenu_update
+	_draw = startmenu_draw
+	-- todo add startmenu music
 end
-
-function vcenter2(s) --tip
-	return 78
+function startmenu_update()
+	if btnp(4) or btnp(5) then
+		game_init()
+	end
 end
-
-function vcenter3(s) --tip
-	return 68
-end
--- menu display
-
 function startmenu_draw()
 	cls()
 	map(58,0,0,0,16,16)
---	sspr(40,0,16,16,37,28,54,54)
- osprint(title, 17,44,18,8)
- osprint(title2, 34,62,9,8) --gonewrong
-	print(textlabel,hcenter(textlabel),vcenter(textlabel),5)
-	
+	--	sspr(40,0,16,16,37,28,54,54)
+	osprint(title, 17,44,18,8)
+	osprint(title2, 34,62,9,8) --gonewrong
+	print(textlabel,hcenter(textlabel),78,5)
 end
 
+-- gameover
+
+function gameover_init()
+	_update = gameover_update
+	_draw = gameover_draw
+end
+function gameover_update()
+	if btnp(4) or btnp(5) then
+		startmenu_init()
+	end
+end
 function gameover_draw()
 	cls()
 	map(75,0,0,0,16,16)
- osprint("game over", 11,50,18,8)
-	print(tamadied,hcenter(tamadied),vcenter3(tamadied),8)
-	print(restarttip,hcenter(restarttip),vcenter2(restarttip),7)
+	osprint("game over", 11,50,18,8)
+	print(tamadied,hcenter(tamadied),68,8)
+	print(restarttip,hcenter(restarttip),78,7)
 end
 
+-- win
+
+function win_init()
+	_update = win_update
+	_draw = win_draw
+end
+function win_update()
+	if btnp(4) or btnp(5) then
+		startmenu_init()
+	end
+end
 function win_draw()
 	cls()
 	map(93,0,0,0,16,16)
- osprint("congratulations", 5,55,12,8)
-	print(winmessage,hcenter(winmessage),vcenter3(winmessage),8)
-	end
-
---_draw=gameover_draw
---_draw=startmenu_draw
---_draw=win_draw
+	osprint("congratulations", 5,55,12,8)
+	print(winmessage,hcenter(winmessage),68,8)
+end
 
 -- tama
 
