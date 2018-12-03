@@ -67,7 +67,7 @@ function tma_init()
 end
 function tma_update()
 	-- random behaviour
-	if not tma_dst and rnd(64)<1 then
+	if not tma_dst and rnd(128)<1 then
 		tma_goto(tma_x+rnd(64)-32,tma_y+rnd(64)-32)
 	end
 
