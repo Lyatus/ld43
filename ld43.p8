@@ -109,6 +109,8 @@ function tma_draw()
 	end)
 end
 function tma_goto(x, y)
+	x = mid(0,x,255)
+	y = mid(0,y,255)
 	tma_path = pathfind(flr(tma_x/8),flr(tma_y/8),flr(x/8),flr(y/8))
 	if tma_path then
 		tma_path_i = 1
