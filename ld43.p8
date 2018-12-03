@@ -337,6 +337,11 @@ end
 -- spawn
 
 spa_candy = {
+	update = function(o)
+		if tma_stage==tma_stages[3] then
+			o.act = o.act_refuse
+		end
+	end,
 	draw = function(o)
 		pnt_add(o.y,function()
 			spr(96,o.x-map_x-4,o.y-map_y-4)
@@ -346,6 +351,9 @@ spa_candy = {
 		lth_add(2)
 		tma_ate()
 		ent_rem(o)
+	end,
+	act_refuse = function(o)
+		
 	end,
 }
 spa_villager = {
