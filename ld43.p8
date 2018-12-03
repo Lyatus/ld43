@@ -282,7 +282,7 @@ function lth_draw()
 	end
 end
 function lth_add(v)
-	lth = max(v,lth+v)
+	lth = mid(0,lth_max,lth+v)
 	lth_frame = 0
 end
 
