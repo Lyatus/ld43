@@ -168,7 +168,7 @@ function tma_draw()
 	local sprite = tma_stage.idl_spr
 	local off_x = -8
 	local off_y = -14
-	if tma_dst and tma_frame % 6 < 2 then
+	if tma_m.dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
 	if tma_dst and tma_frame%6==5 then
