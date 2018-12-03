@@ -380,7 +380,7 @@ spa_candy = {
 		ent_rem(o)
 	end,
 	act_refuse = function(o)
-		
+		sfx_refuse()
 	end,
 }
 spa_villager = {
