@@ -315,8 +315,9 @@ end
 
 -- cycle
 
+cyc_min_per_frame = 1
 function cyc_init()
-	cyc_frame = 0
+	cyc_frame = (60*8) * cyc_min_per_frame
 end
 function cyc_update()
 	cyc_frame += 1
@@ -343,7 +344,7 @@ function cyc_draw()
 		pal(5,5,1)
 	end
 end
-function cyc_minute() return cyc_frame end
+function cyc_minute() return cyc_frame * cyc_min_per_frame end
 function cyc_hour() return cyc_minute() / 60 end
 function cyc_day() return cyc_hour() / 24 end
 function cyc_is_day() return abs(cyc_hour() % 24 - 12) < 8 end
