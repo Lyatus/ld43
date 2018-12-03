@@ -315,12 +315,10 @@ spa_villager = {
 }
 function spa_init()
 	spas = {}
-	add(spas,{
-		x=85,y=130,ent=spa_candy,
-	})
-	add(spas,{
-		x=48,y=48,ent=spa_villager,
-	})
+	add(spas,{x=85,y=130,ent=spa_candy})
+	add(spas,{x=180,y=208,ent=spa_candy})
+	add(spas,{x=204,y=234,ent=spa_candy})
+	add(spas,{x=48,y=48,ent=spa_villager})
 end
 function spa_update()
 	local today = flr(cyc_day())
