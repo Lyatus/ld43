@@ -388,6 +388,96 @@ function hou_draw()
 	end
 end
 
+-- pathfinding
+
+pfd_stride = 100
+function pfd_nodeid(x,y) return x*pfd_stride+y end
+function pfd_coords(id) return {x=flr(id/pfd_stride),y=id%pfd_stride} end
+function pfd_dist(a,b)
+	a = pfd_coords(a)
+	b = pfd_coords(b)
+	local dx = a.x-b.x
+	local dy = a.y-b.y
+	return dx*dx+dy*dy
+end
+function pfd_path(came_from,current)
+	local path = nil
+	while came_from[current] do
+		local node = pfd_coords(current)
+		node.next = path
+		path = node
+		current = came_from[current]
+	end
+	return path
+end
+function pfd_add_neighbor(neighbors,candidate)
+	local p = pfd_coords(candidate)
+	if p.x>0 and p.y>0 and not mfget(p.x,p.y,0) then
+		add(neighbors,candidate)
+	end
+end
+function pfd_neighbors(nid)
+	local neighbors = {}
+	pfd_add_neighbor(neighbors,nid+1)
+	pfd_add_neighbor(neighbors,nid-1)
+	pfd_add_neighbor(neighbors,nid+pfd_stride)
+	pfd_add_neighbor(neighbors,nid-pfd_stride)
+	return neighbors
+end
+function pfd_score(score,index) return score[index] or 16000 end
+function pathfind(sx,sy,tx,ty)
+	if mfget(tx,ty,0) then
+		return nil
+	end
+	local start = pfd_nodeid(sx,sy)
+	local target = pfd_nodeid(tx,ty)
+	local closed_set = {}
+	local open_set = {[start]=true}
+	local open_count = 1
+	local came_from = {}
+	local g_score = {}
+	local f_score = {}
+	g_score[start] = 0
+	f_score[start] = pfd_dist(start,target)
+
+	while open_count > 0 do
+		local current = nil
+		for id,_ in pairs(open_set) do
+			if not current or pfd_score(f_score,id)<pfd_score(f_score,current) then
+				current = id
+			end
+		end
+
+		if current==target then
+			return pfd_path(came_from,current)
+		end
+
+		open_set[current] = nil
+		open_count -= 1
+		closed_set[current] = true
+
+		for neighbor in all(pfd_neighbors(current)) do
+			if not closed_set[neighbor] then
+				local tentative_g_score = pfd_score(g_score,current) + pfd_dist(current,neighbor)
+
+				local newly_open = false
+				if not open_set[neighbor] then
+					open_set[neighbor] = true
+					open_count += 1
+					newly_open = true
+				end
+				if newly_open or tentative_g_score < pfd_score(g_score,neighbor) then
+					came_from[neighbor] = current
+					g_score[neighbor] = tentative_g_score
+					f_score[neighbor] = g_score[neighbor] + pfd_dist(neighbor,target)
+				end
+			end
+		end
+	end
+
+	return nil
+end
+
 -- sound
 
 function sfx_step()
