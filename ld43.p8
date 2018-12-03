@@ -174,11 +174,11 @@ function tma_draw()
 	if tma_dst and tma_frame%6==5 then
 		sfx_step()
 	end
-	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
-		sprite = tma_stage.eat_spr
-	end
 	if tma_ate_villager then
 		sprite = 12
+	end
+	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
+		sprite = tma_stage.eat_spr
 	end
 	pnt_add(tma_m.y,function()
 		spr(sprite,tma_m.x-map_x+off_x,tma_m.y-map_y+off_y,2,2)
