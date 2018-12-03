@@ -489,9 +489,9 @@ function cyc_is_night() return not cyc_is_day() end
 
 houses = {
 	{
-		x=4,y=2,
-		mx=35,my=11,
-		w=5,h=6,
+		x=4,y=1,
+		mx=35,my=10,
+		w=5,h=7,
 	},
 	{
 		x=20,y=3,
@@ -499,9 +499,9 @@ houses = {
 		w=8,h=6,
 	},
 	{
-		x=5,y=19,
-		mx=45,my=3,
-		w=9,h=6,
+		x=5,y=20,
+		mx=45,my=2,
+		w=9,h=7,
 	},
 
 	-- trees
