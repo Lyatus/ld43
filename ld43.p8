@@ -135,41 +135,12 @@ tma_stages = {
 
 function tma_init()
 	tma_stage = tma_stages[1]
-	tma_x = 96
-	tma_y = 96
+	tma_m = mov_create(96,96)
 	tma_frame = 0
 	tma_eat_frame = -99
 end
 function tma_update()
-	-- random behaviour
-	if not tma_dst and rnd(128)<1 then
-		tma_goto(tma_x+rnd(64)-32,tma_y+rnd(64)-32)
-	end
-
-	-- movement
-	if tma_dst then
-		local tma_local_dst_x = tma_dst_x
-		local tma_local_dst_y = tma_dst_y
-		while tma_path and tma_path.x==flr(tma_x/8) and tma_path.y==flr(tma_y/8) do
-			tma_path = tma_path.next
-		end
-		if tma_path then
-			tma_local_dst_x = tma_path.x*8+4
-			tma_local_dst_y = tma_path.y*8+4
-		end
-		local tma_new_x = mid(tma_x+1, tma_x-1, tma_local_dst_x)
-		local tma_new_y = mid(tma_y+1, tma_y-1, tma_local_dst_y)
-		local col_x = mfget((tma_new_x-4)/8,tma_y/8,0) or mfget((tma_new_x+4)/8,tma_y/8,0)
-		local col_y = mfget((tma_x-3)/8,tma_new_y/8,0) or mfget((tma_x+3)/8,tma_new_y/8,0)
-		tma_new_x = col_x and tma_x or tma_new_x
-		tma_new_y = col_y and tma_y or tma_new_y
-		if tma_new_x != tma_x or tma_new_y != tma_y then
-			tma_x = tma_new_x
-			tma_y = tma_new_y
-		else
-			tma_dst = nil
-		end
-	end
+	tma_m:update()
 	tma_stage = tma_stages[mid(1,3,ceil(cyc_day()))]
 	tma_frame += 1
 end
@@ -186,21 +157,9 @@ function tma_draw()
 	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
 		sprite = tma_stage.eat_spr
 	end
-	pnt_add(tma_y,function()
-		spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
+	pnt_add(tma_m.y,function()
+		spr(sprite,tma_m.x-map_x+off_x,tma_m.y-map_y+off_y,2,2)
 	end)
-end
-function tma_goto(x, y)
-	x = mid(8,x,247)
-	y = mid(8,y,247)
-	tma_path = pathfind(flr(tma_x/8),flr(tma_y/8),flr(x/8),flr(y/8))
-	if tma_path then
-		tma_path_i = 1
-		tma_dst = true
-		tma_dst_x = x
-		tma_dst_y = y
-		ent_cur_act = nil -- ugh
-	end
 end
 function tma_ate()
 	tma_eat_frame = tma_frame
@@ -213,10 +172,10 @@ function map_init()
 	map_y = 32
 end
 function map_update()
-	if map_x+48 < tma_x then map_move(1,0) end
-	if map_x+80 > tma_x then map_move(-1,0) end
-	if map_y+48 < tma_y then map_move(0,1) end
-	if map_y+80 > tma_y then map_move(0,-1) end
+	if map_x+48 < tma_m.x then map_move(1,0) end
+	if map_x+80 > tma_m.x then map_move(-1,0) end
+	if map_y+48 < tma_m.y then map_move(0,1) end
+	if map_y+80 > tma_m.y then map_move(0,-1) end
 end
 function map_draw()
 	map(map_x/8, map_y/8, -(map_x%8), -(map_y%8), 17, 17)
@@ -244,7 +203,7 @@ function crs_update()
 		if ent and ent.act then
 			ent_act(ent)
 		else -- tama destination
-			tma_goto(crs_x+map_x, crs_y+map_y)
+			tma_m:go(crs_x+map_x, crs_y+map_y)
 		end
 	end
 	if btn(0) then crs_x -= 2 end
@@ -335,8 +294,8 @@ function ent_init()
 end
 function ent_update()
 	if ent_cur_act and ent_cur_act.act
-	and mid(tma_x,ent_cur_act.x-4,ent_cur_act.x+4) == tma_x
-	and mid(tma_y,ent_cur_act.y-4,ent_cur_act.y+4) == tma_y then
+	and mid(tma_m.x,ent_cur_act.x-4,ent_cur_act.x+4) == tma_m.x
+	and mid(tma_m.y,ent_cur_act.y-4,ent_cur_act.y+4) == tma_m.y then
 		ent_cur_act:act()
 		ent_cur_act = nil
 	end
@@ -366,7 +325,7 @@ function ent_at(x,y)
 	return nil
 end
 function ent_act(e)
-	tma_goto(e.x,e.y)
+	tma_m:go(e.x,e.y)
 	ent_cur_act = e
 end
 
@@ -481,8 +440,8 @@ houses = {
 function hou_draw()
 	for h in all(houses) do
 		if h.p
-		or mid(tma_x,h.x*8,(h.x+h.w)*8) != tma_x
-		or mid(tma_y,h.y*8,(h.y+h.h)*8) != tma_y then
+		or mid(tma_m.x,h.x*8,(h.x+h.w)*8) != tma_m.x
+		or mid(tma_m.y,h.y*8,(h.y+h.h)*8) != tma_m.y then
 			pnt_add((h.y+h.h)*8,function()
 				map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
 			end)
@@ -578,6 +537,59 @@ function pathfind(sx,sy,tx,ty)
 	end
 
 	return nil
+end
+
+-- movement
+
+function mov_create(x,y)
+	return {
+		x=x,
+		y=y,
+		go=function(o,x,y)
+			x = mid(8,x,247)
+			y = mid(8,y,247)
+			o.path = pathfind(flr(o.x/8),flr(o.y/8),flr(x/8),flr(y/8))
+			if o.path then
+				o.dst = true
+				o.dst_x = x
+				o.dst_y = y
+				if o==tma_m then -- todo move this
+					ent_cur_act = nil -- ugh
+				end
+			end
+		end,
+		update=function(o)
+			-- random behaviour
+			if not o.dst and rnd(128)<1 then
+				o:go(o.x+rnd(64)-32,o.y+rnd(64)-32)
+			end
+
+			-- movement
+			if o.dst then
+				local local_dst_x = o.dst_x
+				local local_dst_y = o.dst_y
+				while o.path and o.path.x==flr(o.x/8) and o.path.y==flr(o.y/8) do
+					o.path = o.path.next
+				end
+				if o.path then
+					local_dst_x = o.path.x*8+4
+					local_dst_y = o.path.y*8+4
+				end
+				local new_x = mid(o.x+1, o.x-1, local_dst_x)
+				local new_y = mid(o.y+1, o.y-1, local_dst_y)
+				local col_x = mfget((new_x-4)/8,o.y/8,0) or mfget((new_x+4)/8,o.y/8,0)
+				local col_y = mfget((o.x-3)/8,new_y/8,0) or mfget((o.x+3)/8,new_y/8,0)
+				new_x = col_x and o.x or new_x
+				new_y = col_y and o.y or new_y
+				if new_x != o.x or new_y != o.y then
+					o.x = new_x
+					o.y = new_y
+				else
+					o.dst = nil
+				end
+			end
+		end,
+	}
 end
 
 -- sound
