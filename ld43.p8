@@ -11,6 +11,7 @@ function _init()
 	map_init()
 	spa_init()
 	tma_init()
+	music(0)
 end
 function _update()
 	crs_update()
