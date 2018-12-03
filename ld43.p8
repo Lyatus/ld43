@@ -392,6 +392,8 @@ spa_villager = {
 	end,
 	update = function(o)
 		o.m:update()
+		if (o.x < o.m.x) o.flip = false
+		if (o.x > o.m.x) o.flip = true
 		o.x = o.m.x
 		o.y = o.m.y
 		if tma_stage==tma_stages[3] then
@@ -405,7 +407,7 @@ spa_villager = {
 			sprite = 204
 		end
 		pnt_add(o.y,function()
-			spr(sprite,o.x-map_x-8,o.y-map_y-14,2,2)
+			spr(sprite,o.x-map_x-8,o.y-map_y-14,2,2,o.flip)
 		end)
 	end,
 	draw_dead = function(o)
