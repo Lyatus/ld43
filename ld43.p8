@@ -387,6 +387,7 @@ spa_candy = {
 spa_villager = {
 	init = function(o)
 		o.m = mov_create(o.x,o.y)
+		o.frame = 0
 		villager_count = (villager_count or 0) + 1
 	end,
 	update = function(o)
@@ -396,10 +397,15 @@ spa_villager = {
 		if tma_stage==tma_stages[3] then
 			o.act = o.act_eat -- they can be eaten now!
 		end
+		o.frame += 1
 	end,
 	draw = function(o)
+		local sprite = 202
+		if o.m.dst and o.frame % 6 < 3 then
+			sprite = 204
+		end
 		pnt_add(o.y,function()
-			spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
+			spr(sprite,o.x-map_x-8,o.y-map_y-14,2,2)
 		end)
 	end,
 	draw_dead = function(o)
