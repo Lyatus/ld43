@@ -349,11 +349,20 @@ spa_candy = {
 	end,
 }
 spa_villager = {
+	init = function(o)
+		o.m = mov_create(o.x,o.y)
+	end,
+	update = function(o)
+		o.m:update()
+		o.x = o.m.x
+		o.y = o.m.y
+	end,
 	draw = function(o)
 		pnt_add(o.y,function()
 			spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
 		end)
 	end,
+	act = function(o) end,
 }
 function spa_init()
 	spas = {}
