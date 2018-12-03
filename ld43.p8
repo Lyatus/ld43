@@ -157,6 +157,7 @@ function tma_init()
 	tma_m = mov_create(96,96)
 	tma_frame = 0
 	tma_eat_frame = -99
+	tma_ate_villager = false
 end
 function tma_update()
 	tma_m:update()
@@ -175,6 +176,9 @@ function tma_draw()
 	end
 	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
 		sprite = tma_stage.eat_spr
+	end
+	if tma_ate_villager then
+		sprite = 12
 	end
 	pnt_add(tma_m.y,function()
 		spr(sprite,tma_m.x-map_x+off_x,tma_m.y-map_y+off_y,2,2)
@@ -408,6 +412,7 @@ spa_villager = {
 		o.act = function() end
 
 		villager_count -= 1
+		tma_ate_villager = true
 		if villager_count==0 then
 			win_init()
 		end
