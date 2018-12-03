@@ -95,7 +95,7 @@ function tma_update()
 			tma_dst = nil
 		end
 	end
-	tma_stage = tma_stages[min(3,ceil(cyc_day()))]
+	tma_stage = tma_stages[mid(1,3,ceil(cyc_day()))]
 	tma_frame += 1
 end
 function tma_draw()
