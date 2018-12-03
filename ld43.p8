@@ -41,6 +41,81 @@ function _draw()
 	cyc_draw()
 end
 
+-- start menu
+
+-- samclaire- cool print (outlined, scaled)
+
+function osprint(text, x, y, height, color)
+ -- save first line of image
+ local save={}
+ for i=1,96 do save[i]=peek4(0x6000+(i-1)*4) end
+ memset(0x6000,0,384)
+ print(text, 0, 0, 7)
+ -- restore image and save first line of sprites
+ for i=1,96 do local p=save[i] save[i]=peek4((i-1)*4) poke4((i-1)*4,peek4(0x6000+(i-1)*4)) poke4(0x6000+(i-1)*4, p) end
+ -- cool blit
+--	pal() pal(7,6)
+--	for i=-1,1 do for j=-1,1 do sspr(0, 0, 128, 6, x+i, y+j, 128 * height / 6, height) end end
+	pal(7,color)
+	sspr(0, 0, 128, 6, x, y, 128 * height / 6, height)
+ -- restore first line of sprites
+ for i=1,96 do poke4(0x0000+(i-1)*4, save[i]) end
+ pal()
+end
+
+	-- centered text
+title="▤tama▤"
+title2="gone wrong"
+textlabel="press z/x/c to start"
+restarttip="press z/x/c to restart"
+tamadied="your tama starved to death"
+winmessage="your tama went wrong"
+function hcenter(s)
+	return 64-#s*2
+end
+
+function vcenter(s) --tip
+	return 78
+end
+
+function vcenter2(s) --tip
+	return 78
+end
+
+function vcenter3(s) --tip
+	return 68
+end
+-- menu display
+
+function startmenu_draw()
+	cls()
+	map(58,0,0,0,16,16)
+--	sspr(40,0,16,16,37,28,54,54)
+ osprint(title, 17,44,18,8)
+ osprint(title2, 34,62,9,8) --gonewrong
+	print(textlabel,hcenter(textlabel),vcenter(textlabel),5)
+	
+end
+
+function gameover_draw()
+	cls()
+	map(75,0,0,0,16,16)
+ osprint("game over", 11,50,18,8)
+	print(tamadied,hcenter(tamadied),vcenter3(tamadied),8)
+	print(restarttip,hcenter(restarttip),vcenter2(restarttip),7)
+end
+
+function win_draw()
+	cls()
+	map(93,0,0,0,16,16)
+ osprint("congratulations", 5,55,12,8)
+	print(winmessage,hcenter(winmessage),vcenter3(winmessage),8)
+	end
+
+--_draw=gameover_draw
+--_draw=startmenu_draw
+--_draw=win_draw
+
 -- tama
 
 tma_stages = {
