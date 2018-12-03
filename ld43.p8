@@ -171,7 +171,7 @@ function tma_draw()
 	if tma_m.dst and tma_frame % 6 < 2 then
 		off_y -= 1
 	end
-	if tma_dst and tma_frame%6==5 then
+	if tma_m.dst and tma_frame%6==5 then
 		sfx_step()
 	end
 	if tma_ate_villager then
