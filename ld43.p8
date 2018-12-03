@@ -391,6 +391,8 @@ function spa_init()
 	add(spas,{x=180,y=208,ent=spa_candy})
 	add(spas,{x=204,y=234,ent=spa_candy})
 	add(spas,{x=48,y=48,ent=spa_villager})
+	add(spas,{x=184,y=56,ent=spa_villager})
+	add(spas,{x=64,y=176,ent=spa_villager})
 end
 function spa_update()
 	local today = flr(cyc_day())
