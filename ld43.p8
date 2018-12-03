@@ -265,6 +265,10 @@ function lth_update()
 	lth_frame += 1
 	if lth_frame%240==0 then
 		lth -= 1
+		-- todo add lose health sound
+		if lth==0 then
+			gameover_init()
+		end
 	end
 end
 function lth_draw()
