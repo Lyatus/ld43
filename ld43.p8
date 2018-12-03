@@ -382,6 +382,7 @@ spa_candy = {
 spa_villager = {
 	init = function(o)
 		o.m = mov_create(o.x,o.y)
+		villager_count = (villager_count or 0) + 1
 	end,
 	update = function(o)
 		o.m:update()
@@ -405,6 +406,11 @@ spa_villager = {
 		o.update = function() end
 		o.draw = o.draw_dead
 		o.act = function() end
+
+		villager_count -= 1
+		if villager_count==0 then
+			win_init()
+		end
 	end,
 	act = function(o) end,
 }
