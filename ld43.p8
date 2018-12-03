@@ -299,6 +299,11 @@ function ent_update()
 		ent_cur_act:act()
 		ent_cur_act = nil
 	end
+	for ent in all(ents) do
+		if ent.update then
+			ent:update()
+		end
+	end
 end
 function ent_draw()
 	for ent in all(ents) do
@@ -366,6 +371,9 @@ function spa_update()
 				new_ent.x = spa.x
 				new_ent.y = spa.y
 				new_ent.spa = spa
+				if new_ent.init then
+					new_ent:init()
+				end
 				ent_add(new_ent)
 				spa.childful = true
 			end
