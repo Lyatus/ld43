@@ -14,7 +14,6 @@ function game_init()
 	map_init()
 	spa_init()
 	tma_init()
-	music(0)
 	_update = game_update
 	_draw = game_draw
 	villager_count = 0
@@ -83,7 +82,7 @@ end
 function startmenu_init()
 	_update = startmenu_update
 	_draw = startmenu_draw
-	-- todo add startmenu music
+	music(0)
 end
 function startmenu_update()
 	if btnp(4) or btnp(5) then
