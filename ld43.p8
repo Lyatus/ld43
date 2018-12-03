@@ -276,6 +276,9 @@ function ent_add(e)
 end
 function ent_rem(e)
 	del(ents,e)
+	if e.spa then
+		e.spa.childful = false
+	end
 end
 function ent_at(x,y)
 	-- todo handle entity size?
@@ -324,10 +327,14 @@ function spa_update()
 	local today = flr(cyc_day())
 	for spa in all(spas) do
 		if not spa.last or spa.last != today then
-			local new_ent = copy(spa.ent)
-			new_ent.x = spa.x
-			new_ent.y = spa.y
-			ent_add(new_ent)
+			if not spa.childful then
+				local new_ent = copy(spa.ent)
+				new_ent.x = spa.x
+				new_ent.y = spa.y
+				new_ent.spa = spa
+				ent_add(new_ent)
+				spa.childful = true
+			end
 			spa.last = today
 		end
 	end
