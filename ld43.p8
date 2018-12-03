@@ -17,6 +17,7 @@ function game_init()
 	music(0)
 	_update = game_update
 	_draw = game_draw
+	villager_count = 0
 end
 function game_update()
 	crs_update()
@@ -388,7 +389,7 @@ spa_villager = {
 	init = function(o)
 		o.m = mov_create(o.x,o.y)
 		o.frame = 0
-		villager_count = (villager_count or 0) + 1
+		villager_count += 1
 	end,
 	update = function(o)
 		o.m:update()
