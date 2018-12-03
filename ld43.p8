@@ -409,7 +409,7 @@ spa_villager = {
 		tma_ate()
 		o.update = function() end
 		o.draw = o.draw_dead
-		o.act = function() end
+		o.act = nil
 
 		villager_count -= 1
 		tma_ate_villager = true
@@ -417,7 +417,6 @@ spa_villager = {
 			win_init()
 		end
 	end,
-	act = function(o) end,
 }
 function spa_init()
 	spas = {}
