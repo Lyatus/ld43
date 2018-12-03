@@ -25,11 +25,17 @@ function _draw()
 	cls()
 	palt(0,false)
 	palt(11,true)
+
+	-- world
 	map_draw()
 	hou_draw()
 	ent_draw()
-	lth_draw()
 	tma_draw()
+
+	pnt_flush()
+
+	-- ui
+	lth_draw()
 	crs_draw()
 	cyc_draw()
 end
@@ -89,7 +95,9 @@ function tma_draw()
 	if tma_eat_frame>=tma_frame-16 and tma_frame%6<3 then
 		sprite = tma_stage.eat_spr
 	end
-	spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
+	pnt_add(tma_y,function()
+		spr(sprite,tma_x-map_x+off_x,tma_y-map_y+off_y,2,2)
+	end)
 end
 function tma_goto(x, y)
 	tma_dst = true
@@ -195,6 +203,31 @@ function lth_add(v)
 	lth_frame = 0
 end
 
+-- paint
+-- painter's algorithm
+
+function pnt_add(y,f)
+	if not pnt_cmd_list or (pnt_cmd_list and y<pnt_cmd_list.y) then
+		pnt_cmd_list = {
+			y=y,f=f,n=pnt_cmd_list
+		}
+	else
+		cmd = pnt_cmd_list
+		while cmd.n and y> cmd.n.y do
+			cmd = cmd.n
+		end
+		cmd.n = {
+			y=y,f=f,n=cmd.n
+		}
+	end
+end
+function pnt_flush()
+	while pnt_cmd_list do
+		pnt_cmd_list.f()
+		pnt_cmd_list = pnt_cmd_list.n
+	end
+end
+
 -- entities
 -- entities have draws and actions associated to them
 -- actions get called when tama is near enough
@@ -241,7 +274,9 @@ end
 
 spa_candy = {
 	draw = function(o)
-		spr(96,o.x-map_x-4,o.y-map_y-4)
+		pnt_add(o.y,function()
+			spr(96,o.x-map_x-4,o.y-map_y-4)
+		end)
 	end,
 	act = function(o)
 		lth_add(2)
@@ -251,7 +286,9 @@ spa_candy = {
 }
 spa_villager = {
 	draw = function(o)
-		spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
+		pnt_add(o.y,function()
+			spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
+		end)
 	end,
 }
 function spa_init()
@@ -336,7 +373,9 @@ function hou_draw()
 	for h in all(houses) do
 		if mid(tma_x,h.x*8,(h.x+h.w)*8) != tma_x
 		or mid(tma_y,h.y*8,(h.y+h.h)*8) != tma_y then
-			map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
+			pnt_add((h.y+h.h)*8,function()
+				map(h.mx,h.my,h.x*8-map_x,h.y*8-map_y,h.w,h.h)
+			end)
 		end
 	end
 end
