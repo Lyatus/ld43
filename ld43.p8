@@ -356,11 +356,24 @@ spa_villager = {
 		o.m:update()
 		o.x = o.m.x
 		o.y = o.m.y
+		if tma_stage==tma_stages[3] then
+			o.act = o.act_eat -- they can be eaten now!
+		end
 	end,
 	draw = function(o)
 		pnt_add(o.y,function()
 			spr(202,o.x-map_x-8,o.y-map_y-14,2,2)
 		end)
+	end,
+	draw_dead = function(o)
+		spr(238,o.x-map_x-8,o.y-map_y-14,2,2)
+	end,
+	act_eat = function(o)
+		lth_add(3)
+		tma_ate()
+		o.update = function() end
+		o.draw = o.draw_dead
+		o.act = function() end
 	end,
 	act = function(o) end,
 }
