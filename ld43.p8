@@ -460,7 +460,7 @@ end
 
 cyc_min_per_frame = 1
 function cyc_init()
-	cyc_frame = (60*8) * cyc_min_per_frame
+	cyc_frame = (60*8) / cyc_min_per_frame
 end
 function cyc_update()
 	cyc_frame += 1
