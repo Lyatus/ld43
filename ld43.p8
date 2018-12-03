@@ -65,6 +65,12 @@ function tma_init()
 	tma_eat_frame = -99
 end
 function tma_update()
+	-- Random behaviour
+	if not tma_dst and rnd(64)<1 then
+		tma_goto(tma_x+rnd(64)-32,tma_y+rnd(64)-32)
+	end
+
+	-- Movement
 	if tma_dst then
 		local tma_local_dst_x = tma_dst_x
 		local tma_local_dst_y = tma_dst_y
