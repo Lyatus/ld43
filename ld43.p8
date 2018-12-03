@@ -66,8 +66,17 @@ function tma_init()
 end
 function tma_update()
 	if tma_dst then
-		local tma_new_x = mid(tma_x+1, tma_x-1, tma_dst_x)
-		local tma_new_y = mid(tma_y+1, tma_y-1, tma_dst_y)
+		local tma_local_dst_x = tma_dst_x
+		local tma_local_dst_y = tma_dst_y
+		while tma_path and tma_path.x==flr(tma_x/8) and tma_path.y==flr(tma_y/8) do
+			tma_path = tma_path.next
+		end
+		if tma_path then
+			tma_local_dst_x = tma_path.x*8+4
+			tma_local_dst_y = tma_path.y*8+4
+		end
+		local tma_new_x = mid(tma_x+1, tma_x-1, tma_local_dst_x)
+		local tma_new_y = mid(tma_y+1, tma_y-1, tma_local_dst_y)
 		local col_x = mfget((tma_new_x-4)/8,tma_y/8,0) or mfget((tma_new_x+4)/8,tma_y/8,0)
 		local col_y = mfget((tma_x-3)/8,tma_new_y/8,0) or mfget((tma_x+3)/8,tma_new_y/8,0)
 		tma_new_x = col_x and tma_x or tma_new_x
@@ -76,7 +85,7 @@ function tma_update()
 			tma_x = tma_new_x
 			tma_y = tma_new_y
 		else
-			tma_dst = false
+			tma_dst = nil
 		end
 	end
 	tma_stage = tma_stages[min(3,ceil(cyc_day()))]
@@ -100,10 +109,14 @@ function tma_draw()
 	end)
 end
 function tma_goto(x, y)
-	tma_dst = true
-	tma_dst_x = x
-	tma_dst_y = y
-	ent_cur_act = nil -- ugh
+	tma_path = pathfind(flr(tma_x/8),flr(tma_y/8),flr(x/8),flr(y/8))
+	if tma_path then
+		tma_path_i = 1
+		tma_dst = true
+		tma_dst_x = x
+		tma_dst_y = y
+		ent_cur_act = nil -- ugh
+	end
 end
 function tma_ate()
 	tma_eat_frame = tma_frame
