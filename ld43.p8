@@ -134,14 +134,14 @@ end
 -- map
 
 function map_init()
-	map_x = 0
-	map_y = 0
+	map_x = 32
+	map_y = 32
 end
 function map_update()
-	if map_x+32 < tma_x then map_move(1,0) end
-	if map_x+96 > tma_x then map_move(-1,0) end
-	if map_y+32 < tma_y then map_move(0,1) end
-	if map_y+96 > tma_y then map_move(0,-1) end
+	if map_x+48 < tma_x then map_move(1,0) end
+	if map_x+80 > tma_x then map_move(-1,0) end
+	if map_y+48 < tma_y then map_move(0,1) end
+	if map_y+80 > tma_y then map_move(0,-1) end
 end
 function map_draw()
 	map(map_x/8, map_y/8, -(map_x%8), -(map_y%8), 17, 17)
